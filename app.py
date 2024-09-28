@@ -12,5 +12,4 @@ input_text=st.text_input("Enter the link of your app")
 submit=st.button("Analyze")
 
 if submit:
-    st.write(func.scrape_content(input_text)[0:-1])
-    #print(func.scrape_content(input_text))
+    st.markdown(func.process_link(input_text))

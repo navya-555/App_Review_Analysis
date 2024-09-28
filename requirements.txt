@@ -1,9 +1,5 @@
 helium
 beautifulsoup4
-langchain
-langchain-community
-langchain-huggingface
 streamlit
 python-dotenv
-requests-html
 google.generativeai

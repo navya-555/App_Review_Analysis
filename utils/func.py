@@ -1,8 +1,6 @@
 from helium import *
-import time
 from bs4 import BeautifulSoup
-from langchain.prompts import PromptTemplate
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from selenium.webdriver.chrome.options import Options
 import os
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -10,6 +8,12 @@ import google.generativeai as genai
 load_dotenv()
 genai.configure(api_key=os.environ["GOOGLE_API"])
 gemini_model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.add_argument("--disable-dev-shm-usage")
+        
 
 def analyze_reviews_with_gemini(text,model):
     prompt = f"""
@@ -25,13 +29,13 @@ def analyze_reviews_with_gemini(text,model):
     """
     
     response = model.generate_content([prompt, text])
-    output = response.text.strip().split('\n')
+    output = response.text.strip()
     return output
 
-def scrape_content(link):
 
-    browser=start_chrome(link,headless=True)
 
+def scrape_reviews(link):
+    browser=start_chrome(link,headless=True,options=chrome_options)
     click("See all reviews")
     click("Star rating")
     click('1-star')
@@ -41,11 +45,15 @@ def scrape_content(link):
     reviews = soup.find_all('div', class_='h3YV2d')
     reviews=[review.get_text(strip=True) for review in reviews]
 
-    time.sleep(5)
-
     kill_browser()
 
-    return(analyze_reviews_with_gemini(str(reviews),gemini_model))
+    return str(reviews)
+
+
+def process_link(link):
+    reviews=scrape_reviews(link)
+    analysis=analyze_reviews_with_gemini(reviews,gemini_model)
+    return analysis
 
 
 
