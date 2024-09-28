@@ -24,8 +24,7 @@ def main():
     # API key validation and model setup
     if key:
         try:
-            os.environ["GOOGLE_API"] = key
-            genai.configure(api_key=os.environ["GOOGLE_API"])
+            genai.configure(api_key=key)
             gemini_model = genai.GenerativeModel(model_name="gemini-1.5-flash")
         except Exception as e:
             st.error("An error occurred.")
