@@ -6,3 +6,4 @@ langchain-huggingface
 streamlit
 python-dotenv
 requests-html
+google.generativeai
