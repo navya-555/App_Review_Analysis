@@ -2,12 +2,9 @@ from helium import *
 from bs4 import BeautifulSoup
 from selenium.webdriver.chrome.options import Options
 import os
-from dotenv import load_dotenv
-import google.generativeai as genai
+#from dotenv import load_dotenv
 
-load_dotenv()
-genai.configure(api_key=os.environ["GOOGLE_API"])
-gemini_model = genai.GenerativeModel(model_name="gemini-1.5-flash")
+#load_dotenv()
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -50,9 +47,9 @@ def scrape_reviews(link):
     return str(reviews)
 
 
-def process_link(link):
+def process_link(link,model):
     reviews=scrape_reviews(link)
-    analysis=analyze_reviews_with_gemini(reviews,gemini_model)
+    analysis=analyze_reviews_with_gemini(reviews,model)
     return analysis
 
 
